@@ -6,8 +6,10 @@ LDLIBS =  -L /usr/local/lib -lopencv_optflow -lopencv_core -lopencv_imgcodecs -l
 
 EXECS = gpc_evaluate gpc_train dis_opticalflow motempl optical_flow_evaluation pcaflow_demo simpleflow_demo
 
+PYFILES = gpc_train_middlebury.py gpc_train_sintel.py motempl.py optical_flow_benchmark.py
 
-all: $(EXECS)
+all: $(EXECS) $(PYFILES)
+	cp -f $(EXECS) $(PYFILES) $(HOME)/bin
 
 gpc_train: gpc_train.cpp
 	c++  $? -I /usr/local/include  -o $@ -L /usr/local/lib -lopencv_core -lopencv_optflow
@@ -17,3 +19,6 @@ gpc_evaluate: gpc_evaluate.cpp
 
 clean:
 	rm -f $(EXECS)
+
+depend:
+	makedepend $(CXXFLAGS) *.cpp

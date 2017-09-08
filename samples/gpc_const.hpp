@@ -1,4 +1,4 @@
 
-const int nTrees = 8;
+const int nTrees = 5;
 
 
