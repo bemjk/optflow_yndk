@@ -28,9 +28,9 @@ def main():
     parser = argparse.ArgumentParser(
         description='Train Global Patch Collider using MPI Sintel dataset')
     parser.add_argument(
-        '--bin_path',
-        help='Path to the training executable (example_optflow_gpc_train)',
-        required=True)
+                        '--bin_path',
+                        help='Path to the training executable (example_optflow_gpc_train)',
+                        required=True)
     parser.add_argument('--dataset_path',
                         help='Path to the directory with frames',
                         required=True)
@@ -41,15 +41,19 @@ def main():
                         help='Descriptor type',
                         type=int,
                         default=0)
+    parser.add_argument('--frame_dist',
+                        help='Frame Skip Distance', type=int, default=20)
     args = parser.parse_args()
 
-    print ('main() args= ', args)
+    FRAME_DIST = args.frame_dist
+
+    #print ('main() args= ', args)
 
     seq = glob.glob(os.path.join(args.dataset_path, '*'))
     seq.sort()
     input_files = []
 
-    print ('main() seq=', seq)
+    #print ('main() seq=', seq)
 
     for s in seq:
         seq_name = os.path.basename(s)
@@ -71,6 +75,8 @@ def main():
     bashcmd = args.bin_path + ' --descriptor-type=%d ' % args.descriptor_type
     for ifiles in input_files:
         bashcmd += '  %s' % ifiles
+
+    print ('@@ Total {} image triplets for training (frame_dist={}).'.format(len(input_files), FRAME_DIST))
     print ('@@ run in bash: ', bashcmd)
 
     #execute([args.bin_path, '--descriptor-type=%d' % args.descriptor_type] + input_files)
