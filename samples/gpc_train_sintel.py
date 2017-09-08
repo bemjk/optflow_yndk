@@ -10,6 +10,7 @@ assert (FRAME_DIST >= 1)
 
 def execute(cmd):
     #print ('execute: ', cmd)
+    print(' -->> python subprocess starting.')
     popen = subprocess.Popen(cmd,
                              stdout=subprocess.PIPE,
                              stderr=subprocess.PIPE)
@@ -47,7 +48,7 @@ def main():
 
     FRAME_DIST = args.frame_dist
 
-    #print ('main() args= ', args)
+    print ('FRAME_DIST set to ', args.frame_dist)
 
     seq = glob.glob(os.path.join(args.dataset_path, '*'))
     seq.sort()
@@ -83,9 +84,10 @@ def main():
     print ('@@ Total {} image triplets for training (frame_dist={}).'.format(len(input_files), FRAME_DIST))
     print ('@@ run in bash: time ', bashcmd)
 
-    #execute([args.bin_path, '--descriptor-type=%d' % args.descriptor_type] + input_files)
+    execute([args.bin_path, '--descriptor-type=%d' % args.descriptor_type, '--max-tree-depth=12', '--print-progress=0'] + input_files)
 
 
 if __name__ == '__main__':
     print ('@@ main function issued.')
     main()
+    print ('@@ finished. bye.')

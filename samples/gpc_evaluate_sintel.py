@@ -1,3 +1,4 @@
+import numpy as np
 import argparse
 import glob
 import os
@@ -9,20 +10,41 @@ assert (FRAME_DIST >= 1)
 
 
 def execute(cmdlist):
+    nm = []
+    et = []
+    ee = []
+    average_num_matches = 0
+    elapsed_time = 0
+    average_epe = 0
+    cnt = 1
     for cmd in cmdlist:
         print ('execute: ', cmd)
-        popen = subprocess.Popen(cmd,
-                                 stdout=subprocess.PIPE,
-                                 stderr=subprocess.PIPE)
-        for stdout_line in iter(popen.stdout.readline, ''):
-            print(stdout_line.rstrip())
-        for stderr_line in iter(popen.stderr.readline, ''):
-            print(stderr_line.rstrip())
-        popen.stdout.close()
-        popen.stderr.close()
-        return_code = popen.wait()
-        if return_code != 0:
-            raise subprocess.CalledProcessError(return_code, cmd)
+        res = subprocess.check_output(cmd)
+        #print ('@@ result = ', res)
+        outlines = res.decode().split('\n')
+
+        nm.append( int(outlines[0].split()[1]) )
+        et.append(float(outlines[1].split()[2]) )
+        ee.append(float(outlines[2].split()[3]) )
+
+        average_num_matches += nm[-1]
+        elapsed_time += et[-1]
+        average_epe  += ee[-1]
+        for line in res.decode().split('\n'):
+            print (' --> ', line)
+        print ('\n!! {}: anm: {}  et: {}  aee: {}\n'.format(cnt, average_num_matches/cnt, elapsed_time, average_epe/cnt))
+        cnt += 1
+
+    average_num_matches /= len(cmdlist)
+    average_epe /= len(cmdlist)
+    print ('@@@ average nm: {}  total et: {}  average ee: {} from {} tests'.format(average_num_matches, elapsed_time, average_epe, len(cmdlist)))
+    print ('@@@ anm = ', nm)
+    print ('@@@ et  = ', et)
+    print ('@@@ ee  = ', ee, ' ', np.array(ee).mean())
+
+    return nm, et, ee
+
+
 
 
 def main():
@@ -40,10 +62,18 @@ def main():
                         required=True)
     parser.add_argument('--out_path',
                         help='Path to the directory of output images',
-                        default='./outdir')
+                        default='./valoutdir')
     parser.add_argument('--frame_dist',
                         help='Frame Skip Distance', type=int, default=20)
     args = parser.parse_args()
+
+    try:
+        os.makedirs(args.out_path)
+    except OSError:
+        if not os.path.isdir(args.out_path):
+            raise
+
+    print ('@ output mage will be stored in the directory {}.'.format(args.out_path))
 
     FRAME_DIST = args.frame_dist
 
@@ -65,17 +95,34 @@ def main():
                                    os.path.basename(frames[i])[0:-4] + '.flo')
             assert (os.path.isfile(gt_flow))
 
-            outimage = os.path.join(args.gt_path, seq_name,
+            outimage = os.path.join(args.out_path, seq_name,
                                    os.path.basename(frames[i])[0:-4] + '-eval.png')
-            cmd = 'gpc_evaluate --gpu ' + frames[i] + ' ' + frames[i+1] + ' ' + gt_flow + ' ' + outimage
+
+            outdir = os.path.join(args.out_path, seq_name)
+            if not os.path.isdir (outdir):
+                os.makedirs(outdir)
+                print ('>> dir generated: ', outdir)
+
+            cmd = [args.bin_path, '--gpu ', frames[i] , frames[i+1] , gt_flow , outimage]
+            bashcmd = '  --gpu ' + frames[i] + ' ' + frames[i+1] + ' ' + gt_flow + ' ' + outimage
             cmdlist.append(cmd)
-            print (cmd)
+            #print (cmd)
+            #print (bashcmd)
+            #subprocess.check_output([args.bin_path, bashcmd])
             #input_files += [frames[i], frames[i + 1], gt_flow]
             #print ('\t\t', [frames[i], frames[i + 1], gt_flow])
 
-    #execute(cmdlist)
+    nm, et, ee = execute(cmdlist)
+    with open (os.path.join(args.out_path, 'outfile.txt'), 'w') as file:
+        file.write ('average_num_matches: ' + str( np.array(nm).mean()) + '\n')
+        file.write ('average_endpointerr: ' + str( np.array(ee).mean()) + '\n')
+        file.write ('total_elapsedtime: ' + str( np.array(et).sum()) + '\n')
+        file.write ('nm= ' + str(nm) + '\n')
+        file.write ('et= ' + str(et) + '\n')
+        file.write ('ee= ' + str(ee) + '\n')
 
 
 if __name__ == '__main__':
     print ('@@ main function issued.')
     main()
+    print ('@@ finished. bye.')
