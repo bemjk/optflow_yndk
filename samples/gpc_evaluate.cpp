@@ -128,7 +128,7 @@ int main( int argc, const char **argv )
 
       std::cout << "Found " << corr.size() << " matches from sz: " << from.rows << "x" << from.cols <<  std::endl;
       std::cout << "Elapsed Time:  " << meter.getTimeSec() << " sec." << std::endl;
-  
+
 
   double error = 0;
   int totalCorrectFlowVectors = 0;

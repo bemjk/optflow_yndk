@@ -56,9 +56,9 @@ def main():
         frames = glob.glob(os.path.join(s, 'frame*.png'))
         frames.sort()
 
-        print ('s=', s)
-        print ('seq_name=', seq_name)
-        print ('frames=', frames)
+        #print ('s=', s)
+        #print ('seq_name=', seq_name)
+        #print ('frames=', frames)
 
         for i in range(0, len(frames) - 1, FRAME_DIST):
             gt_flow = os.path.join(args.gt_path, seq_name,
@@ -66,14 +66,14 @@ def main():
             assert (os.path.isfile(gt_flow))
             input_files += [frames[i], frames[i + 1], gt_flow]
 
-            print ('\t\t', [frames[i], frames[i + 1], gt_flow])
+            #print ('\t\t', [frames[i], frames[i + 1], gt_flow])
 
     bashcmd = args.bin_path + ' --descriptor-type=%d ' % args.descriptor_type
     for ifiles in input_files:
         bashcmd += '  %s' % ifiles
     print ('@@ run in bash: ', bashcmd)
 
-    execute([args.bin_path, '--descriptor-type=%d' % args.descriptor_type] + input_files)
+    #execute([args.bin_path, '--descriptor-type=%d' % args.descriptor_type] + input_files)
 
 
 if __name__ == '__main__':
