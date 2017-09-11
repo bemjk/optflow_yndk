@@ -176,7 +176,7 @@ int main( int argc, const char **argv )
     
     printf ("Average EPE for inliers: %.2f\n", error);
     printf ("Number of matches = %u\n", totalCorrectFlowVectors);
-    printf ("Inlier ratio = %.2%%%\n", totalCorrectFlowVectors/float(totalCorrectFlowVectors+nOutliers));
+    printf ("Inlier ratio = %.2f%%%\n", totalCorrectFlowVectors/float(totalCorrectFlowVectors+nOutliers));
     
     //std::cout << "Average endpoint error: " << error << " px." << std::endl;
     
