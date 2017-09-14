@@ -1,6 +1,7 @@
 
-To test and modify the Optical Flow Algorithms in opencv_contrib
+The purpose of this repository is to test and modify opencv_contrib's optical flow source codes. 
 ==============================================
+In particular, my interest is in the GPC algorithm.
 
 To use this repository instead of original optflow,
 
