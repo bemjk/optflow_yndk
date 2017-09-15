@@ -661,13 +661,13 @@ namespace cv
     trainNode( 0 /* nodeID of root */, sv.begin(), sv.end(), 0 /* tree depth of root */);
     
     // print out tree information
-    printf ("@ Tree information: max_depth=%d", _params.maxTreeDepth);
+    printf ("@ Tree information: max_depth=%d\n", _params.maxTreeDepth);
     for (int d=0; d < _params.maxTreeDepth; d++) {
         int nleaf = 1<<d;
         int startid = nleaf - 1;
         int cnt = 0;
         for (int n=startid; n < startid+nleaf; n++)
-            if (nodes[n].flag)
+            if (n<nodes.size() && nodes[n].flag)
                 cnt++;
         printf ("@@ Tree depth %d has %d/%d leafs.\n", d, cnt, nleaf);
     }
