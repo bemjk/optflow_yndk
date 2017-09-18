@@ -66,8 +66,18 @@ int main( int argc, const char **argv )
   fprintf(stderr, "@ descriptorTy = %d (%s) \n", params.descriptorType, params.descriptorType==0 ? "for quality" : "for for speed");
   fprintf(stderr, "@ printProgres = %s\n", params.printProgress==0 ? "No" : "Yes");
 
+  TickMeter meter;
+  meter.start();
+
+
   Ptr< optflow::GPCForest< nTrees > > forest = optflow::GPCForest< nTrees >::create();
   forest->train( img1, img2, gt, params );
+
+  meter.stop();
+
+  std::cout << " Training finished." <<  std::endl;
+  std::cout << "Elapsed Time:  " << meter.getTimeSec() << " sec." << std::endl;
+
   forest->save( parser.get< String >( "forest" ) );
 
   return 0;
