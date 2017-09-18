@@ -137,7 +137,7 @@ int main( int argc, const char **argv )
     std::cout << "Elapsed Time:  " << meter.getTimeSec() << " sec." << std::endl;
     
 
-    double nOutliers = 0;
+    unsigned nOutliers = 0;
     double error = 0;
     int totalCorrectFlowVectors = 0;
     Mat dispErr = Mat::zeros( from.size(), CV_32FC3 );
@@ -175,11 +175,10 @@ int main( int argc, const char **argv )
         error /= totalCorrectFlowVectors;
     
     printf ("Average EPE for inliers: %.2f\n", error);
-    printf ("Number of matches = %u\n", totalCorrectFlowVectors);
-    printf ("Inlier ratio = %.2f%%%\n", totalCorrectFlowVectors/float(totalCorrectFlowVectors+nOutliers));
-    
-    //std::cout << "Average endpoint error: " << error << " px." << std::endl;
-    
+    printf ("Number of matches = %u total= %u outliers= %u\n", totalCorrectFlowVectors, corr.size(), nOutliers);
+    printf ("Inlier ratio = %.2f% %% \n", totalCorrectFlowVectors/float(totalCorrectFlowVectors+nOutliers));
+
+
     cvtColor( disp, disp, COLOR_HSV2BGR );
     cvtColor( dispErr, dispErr, COLOR_HSV2BGR );
     
