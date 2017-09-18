@@ -1,4 +1,5 @@
 
+CXX = c++ -Ofast
 CFLAGS = `pkg-config opencv --libs --cflags`
 CXXFLAGS = -I /usr/local/include 
 LDLIBS =  -L /usr/local/lib -lopencv_optflow -lopencv_core -lopencv_imgcodecs -lopencv_highgui -lopencv_imgproc -lopencv_videoio -lopencv_video
@@ -11,11 +12,11 @@ PYFILES = gpc_train_middlebury.py gpc_evaluate_sintel.py gpc_train_sintel.py mot
 all: $(EXECS) $(PYFILES)
 	cp -f $(EXECS) $(PYFILES) $(HOME)/bin
 
-gpc_train: gpc_train.cpp
-	c++  $? -I /usr/local/include  -o $@ -L /usr/local/lib -lopencv_core -lopencv_optflow
+gpc_train: gpc_train.cpp /usr/local/lib/libopencv_optflow.so
+	$(CXX)  $@.cpp -I /usr/local/include  -o $@ -L /usr/local/lib -lopencv_core -lopencv_optflow
 
 gpc_evaluate: gpc_evaluate.cpp
-	c++  $? -I /usr/local/include  -o $@ -L /usr/local/lib -lopencv_optflow -lopencv_core -lopencv_imgcodecs -lopencv_highgui -lopencv_imgproc
+	$(CXX)  $? -I /usr/local/include  -o $@ -L /usr/local/lib -lopencv_optflow -lopencv_core -lopencv_imgcodecs -lopencv_highgui -lopencv_imgproc
 
 clean:
 	rm -f $(EXECS)

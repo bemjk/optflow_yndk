@@ -10,9 +10,13 @@ assert (FRAME_DIST >= 1)
 
 
 def execute(cmdlist):
-    nm = []
+    tm = [] # average number of total matches
+    nm = [] # average number of matches (inliers)
     et = []
-    ee = []
+    ee = [] # endpoint error
+    ir = [] # inlier ratio
+
+    average_total_matches = 0
     average_num_matches = 0
     elapsed_time = 0
     average_epe = 0
@@ -21,18 +25,26 @@ def execute(cmdlist):
         print ('execute: ', cmd)
         res = subprocess.check_output(cmd)
         #print ('@@ result = ', res)
-        outlines = res.decode().split('\n')
+        #print ('res:')
+        #print (res)
+        #print ('---')
+        rlist = res.decode().split('\n')
+        #print ('outlines:')
+        print(rlist)
+        #print (' --- ')
+        #for line in res.decode().split('\n'):
+        #    print (' --> ', line)
 
-        nm.append( int(outlines[0].split()[1]) )
-        et.append(float(outlines[1].split()[2]) )
-        ee.append(float(outlines[2].split()[3]) )
+        nm.append( int(rlist[3].split()[4]) ) # num. of inliers
+        tm.append( int(rlist[3].split()[6]) ) # num. of inliers
+        et.append(float(rlist[1].split()[2]) )
+        ee.append(float(rlist[2].split()[4]) )
 
+        average_total_matches += tm[-1]
         average_num_matches += nm[-1]
         elapsed_time += et[-1]
         average_epe  += ee[-1]
-        for line in res.decode().split('\n'):
-            print (' --> ', line)
-        print ('\n!! {}: anm: {}  et: {}  aee: {}\n'.format(cnt, average_num_matches/cnt, elapsed_time, average_epe/cnt))
+        print ('\n!! {}: anm: {}  et: {}  aee: {} avir: {:.2f} {}/{}\n'.format(cnt, average_num_matches/cnt, elapsed_time, average_epe/cnt, average_num_matches/average_total_matches, average_num_matches, average_total_matches))
         cnt += 1
 
     average_num_matches /= len(cmdlist)
@@ -42,7 +54,7 @@ def execute(cmdlist):
     print ('@@@ et  = ', et)
     print ('@@@ ee  = ', ee, ' ', np.array(ee).mean())
 
-    return nm, et, ee
+    return nm, et, ee, ir
 
 
 
@@ -112,12 +124,14 @@ def main():
             #input_files += [frames[i], frames[i + 1], gt_flow]
             #print ('\t\t', [frames[i], frames[i + 1], gt_flow])
 
-    nm, et, ee = execute(cmdlist)
+    nm, et, ee, ir = execute(cmdlist)
     with open (os.path.join(args.out_path, 'outfile.txt'), 'w') as file:
         file.write ('average_num_matches: ' + str( np.array(nm).mean()) + '\n')
+        file.write ('average_inlier_ratio: ' + str( np.array(ir).mean()) + '\n')
         file.write ('average_endpointerr: ' + str( np.array(ee).mean()) + '\n')
         file.write ('total_elapsedtime: ' + str( np.array(et).sum()) + '\n')
         file.write ('nm= ' + str(nm) + '\n')
+        file.write ('ir= ' + str(ir) + '\n')
         file.write ('et= ' + str(et) + '\n')
         file.write ('ee= ' + str(ee) + '\n')
 
