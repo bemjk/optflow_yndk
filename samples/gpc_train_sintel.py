@@ -11,6 +11,11 @@ assert (FRAME_DIST >= 1)
 def execute(cmd):
     #print ('execute: ', cmd)
     print(' -->> python subprocess starting.')
+    res = subprocess.check_output(cmd)
+    res = res.decode().split('\n')
+    print (res)
+    return
+
     popen = subprocess.Popen(cmd,
                              stdout=subprocess.PIPE,
                              stderr=subprocess.PIPE)
@@ -82,7 +87,7 @@ def main():
         bashcmd += '  %s' % ifiles
 
     print ('@@ Total {} image triplets for training (frame_dist={}).'.format(len(input_files), FRAME_DIST))
-    print ('@@ run in bash: time ', bashcmd)
+    print ('@@ run in bash: ', bashcmd)
 
     execute([args.bin_path, '--descriptor-type=%d' % args.descriptor_type, '--max-tree-depth=12', '--print-progress=0'] + input_files)
 
