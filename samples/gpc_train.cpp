@@ -10,7 +10,7 @@ const String keys = "{help h ?       |             | print this message}"
                     "{max-tree-depth |             | Maximum tree depth to stop partitioning}"
                     "{min-samples    |             | Minimum number of samples in the node to stop partitioning}"
                     "{descriptor-type|0            | Descriptor type. Set to 0 for quality, 1 for speed.}"
-                    "{print-progress |             | Set to 0 to enable quiet mode, set to 1 to print progress}"
+                    "{print-progress |0            | Set to 0 to enable quiet mode, set to 1 to print progress}"
                     "{f forest       |forest.yml.gz| Path where to store resulting forest. It is recommended to use .yml.gz extension.}";
 
 #include "gpc_const.hpp"
