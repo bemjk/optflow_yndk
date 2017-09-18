@@ -167,6 +167,7 @@ public:
     double rhs;                                        //!< Bias term of the hyperplane
     unsigned left;
     unsigned right;
+    bool flag; // yndk
 
     bool operator==( const Node &n ) const { return coef == n.coef && rhs == n.rhs && left == n.left && right == n.right; }
   };
