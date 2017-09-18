@@ -35,7 +35,7 @@ static void fillInputImagesFromCommandLine( std::vector< String > &img1, std::ve
 
 int main( int argc, const char **argv )
 {
-  fprintf(stderr, "@ Starting Global Patch Collider training tool.\n");
+  fprintf(stderr, "@ Starting Global Patch Collider training tool: gpc_train.cpp\n");
   CommandLineParser parser( argc, argv, keys );
   parser.about( "Global Patch Collider training tool" );
 
