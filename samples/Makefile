@@ -12,7 +12,7 @@ PYFILES = gpc_train_middlebury.py gpc_evaluate_sintel.py gpc_train_sintel.py mot
 all: $(EXECS) $(PYFILES)
 	cp -f $(EXECS) $(PYFILES) $(HOME)/bin
 
-gpc_train: gpc_train.cpp /usr/local/lib/libopencv_optflow.so
+gpc_train: gpc_train.cpp 
 	$(CXX)  $@.cpp -I /usr/local/include  -o $@ -L /usr/local/lib -lopencv_core -lopencv_optflow
 
 gpc_evaluate: gpc_evaluate.cpp
