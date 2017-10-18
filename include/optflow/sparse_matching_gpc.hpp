@@ -325,6 +325,7 @@ void GPCForest< T >::findCorrespondences( InputArray imgFrom, InputArray imgTo, 
   CV_Assert( imgTo.channels() == 3 );
 
   Mat from, to;
+  printf (">>> findCorrespondences():: from.convertTo( from, CV_32FC3 , 1./255.);\n");
   imgFrom.getMat().convertTo( from, CV_32FC3, 1./255. );
   imgTo.getMat().convertTo( to, CV_32FC3 , 1./255.);
   cvtColor( from, from, COLOR_BGR2YCrCb );
