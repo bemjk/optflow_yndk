@@ -726,8 +726,8 @@ namespace cv
         CV_Assert( from.channels() == 3 );
         CV_Assert( to.channels() == 3 );
         
-        from.convertTo( from, CV_32FC3 );
-        to.convertTo( to, CV_32FC3 );
+        from.convertTo( from, CV_32FC3 , 1./255.);
+        to.convertTo( to, CV_32FC3 , 1./255.);
         cvtColor( from, from, COLOR_BGR2YCrCb );
         cvtColor( to, to, COLOR_BGR2YCrCb );
         
@@ -758,8 +758,8 @@ namespace cv
         CV_Assert( from.channels() == 3 );
         CV_Assert( to.channels() == 3 );
         
-        from.convertTo( from, CV_32FC3 );
-        to.convertTo( to, CV_32FC3 );
+        from.convertTo( from, CV_32FC3 , 1./255.);
+        to.convertTo( to, CV_32FC3 , 1./255.);
         cvtColor( from, from, COLOR_BGR2YCrCb );
         cvtColor( to, to, COLOR_BGR2YCrCb );
         
