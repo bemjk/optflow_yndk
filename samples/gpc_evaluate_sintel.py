@@ -36,7 +36,8 @@ def execute(cmdlist):
         #    print (' --> ', line)
 
         nm.append( int(rlist[3].split()[4]) ) # num. of inliers
-        tm.append( int(rlist[3].split()[6]) ) # num. of inliers
+        tm.append( int(rlist[3].split()[6]) ) # num. of matches
+        ir.append( nm[-1]/float(tm[-1]) ) # num. of matches
         et.append(float(rlist[1].split()[2]) )
         ee.append(float(rlist[2].split()[4]) )
 
@@ -50,9 +51,10 @@ def execute(cmdlist):
     average_num_matches /= len(cmdlist)
     average_epe /= len(cmdlist)
     print ('@@@ average nm: {}  total et: {}  average ee: {} from {} tests'.format(average_num_matches, elapsed_time, average_epe, len(cmdlist)))
-    print ('@@@ anm = ', nm)
-    print ('@@@ et  = ', et)
+    print ('@@@ anm = ', nm, ' ', np.array(nm).mean())
+    print ('@@@ et  = ', et, ' ', np.array(et).mean())
     print ('@@@ ee  = ', ee, ' ', np.array(ee).mean())
+    print ('@@@ ir = ', ir, ' ', np.array(ir).mean())
 
     return nm, et, ee, ir
 
@@ -85,7 +87,10 @@ def main():
         if not os.path.isdir(args.out_path):
             raise
 
-    print ('@ output mage will be stored in the directory {}.'.format(args.out_path))
+    print ('@ output images will be stored in the directory {}.'.format(args.out_path))
+
+    outfiletxt = os.path.join(args.out_path, 'outfile.txt')
+    print ('@ output file is: ', outfiletxt)
 
     FRAME_DIST = args.frame_dist
 

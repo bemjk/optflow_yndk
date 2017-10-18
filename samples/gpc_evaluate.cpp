@@ -125,6 +125,7 @@ int main( int argc, const char **argv )
     
     meter.stop();
     std::cerr << "@ GPCForest loaded from " << forestDumpPath << " Elapsed time for loading: " << meter.getTimeSec() << std::endl;
+    std::cerr << "@ start forest matching with OpenCL " << (useOpenCL ? "ON" : "OFF") << std::endl;
     
     
     meter.start();
